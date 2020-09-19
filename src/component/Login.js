@@ -1,68 +1,66 @@
-import React, { Component} from "react";
+import React, { useState } from "react";
 import '../custom.css'
 import fire from "../config/fire";
 
-class Login extends Component {
-    constructor(props) {
-        super(props)
-        this.login = this.login.bind(this);
-        this.handleChange = this.handleChange.bind(this);
-        this.signup = this.signup.bind(this);
-        this.state = {
-            email: "",
-            password: ""
-        };
-    }
+import { useHistory } from "react-router-dom";
 
-    login(e) {
-        e.preventDefault();
-        fire.auth().signInWithEmailAndPassword(this.state.email, this.state.password).then((u) => {
-            console.log(u)
-        }).catch((err) => {
-            console.log(e);
-        })
-    }
 
-    signup(e) {
-        e.preventDefault();
-        fire.auth().createUserWithEmailAndPassword(this.state.email, this.state.password).then((u) => {
-            console.log(u)
-        }).catch((err) => {
-            console.log(err);
-        })
-    }
+    const Login = (props) => {
+        const history = useHistory();
 
-    handleChange(e) {
-        this.setState({
-            [e.target.name]: e.target.value
-        })
-        console.log(this.state.email);
-    }
+        const [email, setEmail] = useState("");
+        const [password, setPassword] = useState("");
 
-    render() {
+        const login = (e) => {
+            console.log(password);
+            console.log(email);
+            console.log({ password, email });
+            e.preventDefault();
+            fire.auth().signInWithEmailAndPassword(email, password).then((u) => {
+                console.log(u);
+                history.push("/");
+            }).catch((err) => {
+                console.log(e);
+            })
+        }
+
+        function signup() {
+            history.push("/signup");
+        }
+
+        const handleChange = (e) => {
+            const { name, value } = e.target;
+            if (name === "email") {
+                setEmail(value);
+            } else {
+                setPassword(value);
+            }
+        }
+
         return (
             <div class="form-group align-items-center login">
-                <h1>Ingrese sus datos:</h1>
-                <div class="form-group">
-                    <label for="usr">Email:</label>
-                    <input type="text" name="email" class="form-control" id="usr" onChange={this.handleChange} value={this.state.email} />
-                </div>
-                <div class="form-group">
-                    <label for="pwd">Contraseña:</label>
-                    <input type="password" name="password" class="form-control" id="pwd" onChange={this.handleChange} value={this.state.password} />
-                </div>
+                <div class="card-panel">
+                    <h1>Ingrese sus datos:</h1>
+                    <div class="form-group">
+                        <label for="usr">Email:</label>
+                        <input type="text" name="email" class="form-control" id="usr" onChange={handleChange} value={email} />
+                    </div>
+                    <div class="form-group">
+                        <label for="pwd">Contraseña:</label>
+                        <input type="password" name="password" class="form-control" id="pwd" onChange={handleChange} value={password} />
+                    </div>
 
-                <div class="row form-group">
-                    <button type="button" class="btn btn-primary" onClick={this.login}>Login</button>
-                </div>
-                <div class="row">
-                    <button type="button" class="btn btn-primary" onClick={this.signup}>Signup</button>
-                </div>
+                    <div class="row form-group">
+                        <button type="button" class="btn btn-primary" onClick={login} to="/home">Login</button>
+                    </div>
+                    <div class="row">
+                        <button type="button" class="btn btn-primary" onClick={signup}>Signup</button>
+                    </div>
 
+                </div>
             </div>
         );
     }
-}
 
 
-export default Login;
+    export default Login;
