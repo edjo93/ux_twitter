@@ -38,9 +38,10 @@ class App extends Component {
         
         <Router>
           <Switch>
-            <Redirect exact path="/" to="/Home" />
-            <Route path="/Login" component= {Login}/>
-            <ProtectedRoute path="/Home" exact component={Home}/>
+            <Redirect exact path="/" to="/home" />
+            <Route path="/login" component= {Login}/>
+            <Route path="/signup" component= {Signup}/>
+            <ProtectedRoute path="/home" exact component={Home}/>
           </Switch>
         </Router>
       </div>
