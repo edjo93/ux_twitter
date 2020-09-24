@@ -1,16 +1,16 @@
 import React, { useState, useEffect, useRef } from "react";
 import '../custom.css'
 import fire from "../config/fire";
+import { db } from "../config/fire";
 import { useHistory } from "react-router-dom";
 
-const Signup = (props) => {
+const Signup = () => {
     const history = useHistory()
 
     const daylist = [];
 
     const yearlist = [];
 
-    let yeardropdown = useRef(null);
 
     const [data, setData] = useState({
         email: "",
@@ -19,20 +19,31 @@ const Signup = (props) => {
         name: "",
         month: "Enero",
         year: "2001",
-        day: "1"
+        day: "1",
+        numTweets: 0,
+        numFollowing: 0,
+        numFollowers: 0
     });
 
 
-
-
-    const signup = (e) => {
+    const sign = (e) => {
         e.preventDefault();
+        console.log(data)
         fire.auth().createUserWithEmailAndPassword(data.email, data.password).then((u) => {
+            delete data.password;
+            add();
             history.push("/login");
             console.log(u)
         }).catch((err) => {
             console.log(err);
         })
+        console.log("nuevo usuario agregado");
+    }
+
+
+    const add = async () => {
+        db.collection('users').doc().set(data);
+        console.log("nuevo tweet agregado");
     }
 
     const handleChange = (e) => {
@@ -41,16 +52,17 @@ const Signup = (props) => {
     }
 
     const handleClick = (e) => {
-        const { name, value } = e.target.innerText;
-        setData({ ...data, [name]: value });
+        const { name } = e.target;
+        const [isfor, value] = name.split("-");
+        setData({ ...data, [isfor]: value });
     }
 
     for (let index = 1; index <= 31; index++) {
-        daylist.push(<button class="dropdown-item" type="button">{index}</button>)
+        daylist.push(<button class="dropdown-item" type="button" onClick={handleClick} name={`day-${index}`}>{index}</button>)
     }
 
-    for (let index = 1970; index <= 2001; index++) {
-        yearlist.push(<button class="dropdown-item" type="button">{index}</button>)
+    for (let index = 2001; index >= 1970; index--) {
+        yearlist.push(<button class="dropdown-item" type="button" onClick={handleClick} name={`year-${index}`}>{index}</button>)
     }
 
 
@@ -70,6 +82,10 @@ const Signup = (props) => {
                 <div class="form-group">
                     <label for="name">Nombre:</label>
                     <input type="text" name="name" class="form-control" id="name" onChange={handleChange} value={data.name} />
+                </div>
+                <div class="form-group">
+                    <label for="name">Nombre de Usuario:</label>
+                    <input type="text" name="username" class="form-control" id="username" onChange={handleChange} value={data.username} />
                 </div>
                 <div class="form-group">
                     <p>Ingrese su fecha de nacimiento</p>
@@ -93,18 +109,18 @@ const Signup = (props) => {
                                     {data.month}
                                 </button>
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenu3">
-                                    <button class="dropdown-item" type="button" onClick={handleChange} value={data.month}>Diciembre</button>
-                                    <button class="dropdown-item" type="button">Noviembre</button>
-                                    <button class="dropdown-item" type="button">Octubre</button>
-                                    <button class="dropdown-item" type="button">Septiembre</button>
-                                    <button class="dropdown-item" type="button">Agosto</button>
-                                    <button class="dropdown-item" type="button">Mayo</button>
-                                    <button class="dropdown-item" type="button">Julio</button>
-                                    <button class="dropdown-item" type="button">Junio</button>
-                                    <button class="dropdown-item" type="button">Abril</button>
-                                    <button class="dropdown-item" type="button">Marzo</button>
-                                    <button class="dropdown-item" type="button">Febrero</button>
-                                    <button class="dropdown-item" type="button">Enero</button>
+                                    <button class="dropdown-item" type="button" onClick={handleClick} name="month-Diciembre">Diciembre</button>
+                                    <button class="dropdown-item" type="button" onClick={handleClick} name="month-Noviembre">Noviembre</button>
+                                    <button class="dropdown-item" type="button" onClick={handleClick} name="month-Octubre">Octubre</button>
+                                    <button class="dropdown-item" type="button" onClick={handleClick} name="month-Septiembre">Septiembre</button>
+                                    <button class="dropdown-item" type="button" onClick={handleClick} name="month-Agosto">Agosto</button>
+                                    <button class="dropdown-item" type="button" onClick={handleClick} name="month-Mayo">Mayo</button>
+                                    <button class="dropdown-item" type="button" onClick={handleClick} name="month-Julio">Julio</button>
+                                    <button class="dropdown-item" type="button" onClick={handleClick} name="month-Junio">Junio</button>
+                                    <button class="dropdown-item" type="button" onClick={handleClick} name="month-Abril">Abril</button>
+                                    <button class="dropdown-item" type="button" onClick={handleClick} name="month-Marzo">Marzo</button>
+                                    <button class="dropdown-item" type="button" onClick={handleClick} name="month-Febrero">Febrero</button>
+                                    <button class="dropdown-item" type="button" onClick={handleClick} name="month-Enero">Enero</button>
                                 </div>
                             </div>
                         </div>
@@ -121,9 +137,8 @@ const Signup = (props) => {
                         </div>
                     </div>
                 </div>
-
                 <div class="row">
-                    <button type="button" class="btn btn-primary" onClick={signup}>Signup</button>
+                    <button type="button" class="btn btn-primary" onClick={sign}>Signup</button>
                 </div>
             </div>
 

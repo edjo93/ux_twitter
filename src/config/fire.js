@@ -3,14 +3,14 @@ import "firebase/firestore"
 
 
 var firebaseConfig = {
-	apiKey: "AIzaSyAgRgRQq7bWDz_bW4sVfZ6s4tQImpsUvA0",
-  authDomain: "twee-1519c.firebaseapp.com",
-  databaseURL: "https://twee-1519c.firebaseio.com",
-  projectId: "twee-1519c",
-  storageBucket: "twee-1519c.appspot.com",
-  messagingSenderId: "196758834372",
-  appId: "1:196758834372:web:0831ae386583e262650d91",
-  measurementId: "G-Z72B6BDJV5"
+	apiKey: "AIzaSyA4azd3C3FFb9ljA3nHY0HQbcw3UsBRsCM",
+    authDomain: "twitter-5ccd4.firebaseapp.com",
+    databaseURL: "https://twitter-5ccd4.firebaseio.com",
+    projectId: "twitter-5ccd4",
+    storageBucket: "twitter-5ccd4.appspot.com",
+    messagingSenderId: "981584347786",
+    appId: "1:981584347786:web:6808a314b875af36852373",
+    measurementId: "G-D50T5573VB"
  
 };
 

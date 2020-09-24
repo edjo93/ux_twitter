@@ -28,7 +28,6 @@ constructor(props)
   
   render(){
     const { component: Component, ...rest} = this.props;
-    console.log(this.state.user);
     return (
       <Route
         {...rest}
