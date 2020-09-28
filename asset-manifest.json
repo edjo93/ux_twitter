@@ -1,25 +1,25 @@
 {
   "files": {
-    "main.css": "/ux_twitter/static/css/main.8ac886cb.chunk.css",
-    "main.js": "/ux_twitter/static/js/main.45d21c0b.chunk.js",
-    "main.js.map": "/ux_twitter/static/js/main.45d21c0b.chunk.js.map",
+    "main.css": "/ux_twitter/static/css/main.a2c8a2c5.chunk.css",
+    "main.js": "/ux_twitter/static/js/main.d780b29a.chunk.js",
+    "main.js.map": "/ux_twitter/static/js/main.d780b29a.chunk.js.map",
     "runtime-main.js": "/ux_twitter/static/js/runtime-main.8cb602dd.js",
     "runtime-main.js.map": "/ux_twitter/static/js/runtime-main.8cb602dd.js.map",
     "static/css/2.d9ad5f5c.chunk.css": "/ux_twitter/static/css/2.d9ad5f5c.chunk.css",
-    "static/js/2.d9df6034.chunk.js": "/ux_twitter/static/js/2.d9df6034.chunk.js",
-    "static/js/2.d9df6034.chunk.js.map": "/ux_twitter/static/js/2.d9df6034.chunk.js.map",
+    "static/js/2.3c7f2f91.chunk.js": "/ux_twitter/static/js/2.3c7f2f91.chunk.js",
+    "static/js/2.3c7f2f91.chunk.js.map": "/ux_twitter/static/js/2.3c7f2f91.chunk.js.map",
     "index.html": "/ux_twitter/index.html",
-    "precache-manifest.69c5d54d74878574ebce3398c13ab480.js": "/ux_twitter/precache-manifest.69c5d54d74878574ebce3398c13ab480.js",
+    "precache-manifest.c3b24cb531cdb0fe1c45aefd24f9ed35.js": "/ux_twitter/precache-manifest.c3b24cb531cdb0fe1c45aefd24f9ed35.js",
     "service-worker.js": "/ux_twitter/service-worker.js",
     "static/css/2.d9ad5f5c.chunk.css.map": "/ux_twitter/static/css/2.d9ad5f5c.chunk.css.map",
-    "static/css/main.8ac886cb.chunk.css.map": "/ux_twitter/static/css/main.8ac886cb.chunk.css.map",
-    "static/js/2.d9df6034.chunk.js.LICENSE.txt": "/ux_twitter/static/js/2.d9df6034.chunk.js.LICENSE.txt"
+    "static/css/main.a2c8a2c5.chunk.css.map": "/ux_twitter/static/css/main.a2c8a2c5.chunk.css.map",
+    "static/js/2.3c7f2f91.chunk.js.LICENSE.txt": "/ux_twitter/static/js/2.3c7f2f91.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.8cb602dd.js",
     "static/css/2.d9ad5f5c.chunk.css",
-    "static/js/2.d9df6034.chunk.js",
-    "static/css/main.8ac886cb.chunk.css",
-    "static/js/main.45d21c0b.chunk.js"
+    "static/js/2.3c7f2f91.chunk.js",
+    "static/css/main.a2c8a2c5.chunk.css",
+    "static/js/main.d780b29a.chunk.js"
   ]
 }
