@@ -5,8 +5,9 @@ import fire from "./config/fire";
 import Login from "./component/Login";
 import Home from "./component/Home";
 import Signup from "./component/Signup"
-import {Route, BrowserRouter as Router, Switch, Redirect, HashRouter} from "react-router-dom";
+import {Route, Switch, Redirect, HashRouter} from "react-router-dom";
 import ProtectedRoute from "./component/ProtectedRoute";
+import User from "./component/User";
 
 class App extends Component {
   constructor(props)
@@ -33,6 +34,8 @@ class App extends Component {
       }
     })
   }
+
+
   render(){
     return (
       <div> 
@@ -43,6 +46,7 @@ class App extends Component {
             <Route path="/login" component= {Login}/>
             <Route path="/signup" component= {Signup}/>
             <ProtectedRoute path="/home" exact component={Home}/>
+            <Route path="/:userId" component= {User}/>
           </Switch>
         </HashRouter>
       </div>

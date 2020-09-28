@@ -12,9 +12,6 @@ import { useHistory } from "react-router-dom";
         const [password, setPassword] = useState("");
 
         const login = (e) => {
-            console.log(password);
-            console.log(email);
-            console.log({ password, email });
             e.preventDefault();
             fire.auth().signInWithEmailAndPassword(email, password).then((u) => {
                 console.log(u);

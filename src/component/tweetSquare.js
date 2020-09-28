@@ -1,98 +1,84 @@
 import React, { useEffect, useState } from "react";
-
-import {db} from "../config/fire"
+import TweetContent from "./Tweet"
+import { db } from "../config/fire"
 import fire from "../config/fire";
 
+const Tweet = (props) => {
+  const { username } = props;
 
-
-const Tweet = () => {
-
-  
   const [tweets, setTweets] = useState([]);
-  const [currentId, setCurrentId] = useState("");
-  const [currentUser,SetCurrentUSer] = useState("")
-
-  const actualizarUser = () =>{
-    fire.auth().onAuthStateChanged((user)=>{
-      if(user)
-      {
-        //console.log(user.email)
-        SetCurrentUSer({currentUser:user.email});
-        
-      }
-      else{
-        
-      }
-    });
-
-  }
-
-
-  
-
-  const getTweets = async () => {
-
-    
-    
-
-    db.collection("tweets").where("usuario","==","eddas.carrasco@unitec.edu").onSnapshot((querySnapshot) => {
-      const docs = [];
-      querySnapshot.forEach((doc) => {
-        docs.push({ ...doc.data(), id: doc.id });
-      });
-      setTweets(docs);
-    });
-  };
-
+  const [canRemove, setCanRemove] = useState(false);
 
   useEffect(() => {
     getTweets();
-  }, []);
+  }, [username]);
 
+  const getTweets = () => {
+    fire.auth().onAuthStateChanged((user) => {
+      if (user) {
+        
+        db.collection("users").where("username", "==", props.username).onSnapshot((querySnapshot) => {
+          const docs = [];
+          querySnapshot.forEach((doc) => {
+            docs.push({ ...doc.data(), id: doc.id });
+          });
 
+          setCanRemove(user.email === docs[0].email);
 
+          db.collection("tweets").where("usuario", "==", docs[0].email).onSnapshot((querySnapshot) => {
+            const docs2 = [];
+            querySnapshot.forEach((doc) => {
+              docs2.push({ ...doc.data(), id: doc.id });
+            });
 
-  return(
+            setTweets(docs2);
+          });
+        });
 
+        // db.collection("tweets").where("usuario", "==", props.username).onSnapshot((querySnapshot) => {
+        //   const docs = [];
+        //   querySnapshot.forEach((doc) => {
+        //     docs.push({ ...doc.data(), id: doc.id });
+        //   });
+        //   setTweets(docs);
+        //   // param.name=props.name
+        // });
+      }
+      else {
+        let fetchedUser;
+        db.collection("users").where("username", "==", props.username).onSnapshot((querySnapshot) => {
+          const docs = [];
+          querySnapshot.forEach((doc) => {
+            docs.push({ ...doc.data(), id: doc.id });
+          });
 
-    
+          db.collection("tweets").where("usuario", "==", docs[0].email).onSnapshot((querySnapshot) => {
+            const docs2 = [];
+            querySnapshot.forEach((doc) => {
+              docs2.push({ ...doc.data(), id: doc.id });
+            });
+            setTweets(docs2);
+          });
+        });
+      }
+    });
+
+  };
+
+  return (
     <div>
-    {tweets.map((tweet) => (
-
-        <div class="row component text-left">
-  <div class="col-lg-2">  
-    <img src = "" class="img-fluid rounded-circle img-thumbnail"/>
-  </div>
-  <div class="col-lg-10">
-    <b>tweet.username</b> tweet.nickname
-    <div class="tweet-content">
-        {tweet.contenido}
-        <div>
-            <small class="blue-text">{tweet.hashtags}</small>
-        </div>
+      {tweets.map((tweet, index) => <TweetContent removable={canRemove} key={`tweet-${index}`} name={props.name} username={props.username} content={tweet.contenido} hashtags={tweet.hashtags} id={tweet.id} profilepic={props.profilepic} />)};
     </div>
-  </div>
-</div>
-
-  
-
-
-      ))};
-    </div>
-
   );
-
-
-
 };
-  
-export default Tweet; 
+
+export default Tweet;
 
 
-  
 
-	
 
-  
+
+
+
 
 
