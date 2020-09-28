@@ -4,9 +4,7 @@ import Tweet from "./tweetSquare";
 import { db } from "../config/fire";
 import fire from "../config/fire";
 import firebase from 'firebase';
-
-
-
+import "../custom.css"
 
 
 
@@ -19,16 +17,14 @@ class Home extends Component {
         this.state = {
             contenido: "",
             hashtags: "",
-            usuario: ""
-
+            usuario: "",
+            user: {}
         };
-        this.usuario = {};
         this.manejarEntrada = this.manejarEntrada.bind(this);
 
     }
     componentDidMount() {
         this.authListener();
-
     }
 
     authListener() {
@@ -40,12 +36,12 @@ class Home extends Component {
                     querySnapshot.forEach((doc) => {
                         docs.push({ ...doc.data(), id: doc.id });
                     });
-                    this.usuario = docs[0];
-                    console.log(this.usuario);
+                    this.setState({ ...this.state, user: docs[0] });
+                    console.log(docs[0].name);
                 });
             }
             else {
-
+                console.log("No autenticado");
             }
         });
     }
@@ -61,22 +57,26 @@ class Home extends Component {
     render() {
         //enviar datos a firebase
         const add = async () => {
-            console.log(this.state.usuario);
-            this.state.usuario = this.usuario.email;
-            await db.collection('tweets').doc().set(this.state);
+            this.state.usuario = this.state.user.email;
+
+            const { contenido, hashtags, user } = this.state;
+            const payload = {
+                contenido,
+                hashtags,
+                usuario: user.email,
+                time: new Date()
+            };
+
+            await db.collection('tweets').doc().set(payload);
             tweetcount();
-            console.log("nuevo tweet agregado");
         }
 
         const tweetcount = () => {
             const dba = firebase.firestore();
             const increment = firebase.firestore.FieldValue.increment(1);
-            const statsRef = dba.collection('users').doc(this.usuario.id);
+            const statsRef = dba.collection('users').doc(this.state.user.id);
             statsRef.update({ numTweets: increment });
         }
-
-
-
 
         return (
             <div>
@@ -85,27 +85,21 @@ class Home extends Component {
                     <div class="starter-template">
                         <div class="row">
                             <div class="col-lg-4">
-                                <div class="row">
-                                    <div class="col-lg-12">
-
-                                        <div class="card black-text">
-                                            <h4>{this.usuario.name}</h4>
-                                            <div id="div-usuarioactual" class="blue-text">
-                                                <h5>@{this.usuario.username}</h5>
-                                            </div>
-                                            <h6>Tweets: {this.usuario.numTweets}</h6>
-
+                                <div class="card black-text">
+                                    <div class="row">
+                                        <div class="col col-lg-4">
+                                            <img src={this.state.user.profilepic} alt="" id="img" className="img img-profile" />
                                         </div>
-                                    </div>
-                                    <div class="col-lg-12">
-                                        <div class="component text-left" >
-                                            <h2>Trends</h2>
-                                            <div id="div-trends">
-
+                                        <div class="col col-lg-8">
+                                            <h4>{this.state.user.name}</h4>
+                                            <div id="div-usuarioactual" class="blue-text">
+                                                <h5>@{this.state.user.username}</h5>
                                             </div>
+                                            <h6>Tweets: {this.state.user.numTweets}</h6>
                                         </div>
                                     </div>
                                 </div>
+
                             </div>
                             <div class="col-lg-8">
 
@@ -116,11 +110,11 @@ class Home extends Component {
                                     <button type="button" onClick={add} class="btn btn-primary" id="btn-nuevo">Tweet</button>
 
                                 </div>
-
-                                <div id="div-tweets">
-                                    <Tweet name={this.usuario.name} username={this.usuario.username} />
-
-                                </div>
+                                {!!this.state.user.name && (
+                                    <div id="div-tweets">
+                                        <Tweet name={this.state.user.name} username={this.state.user.username} profilepic={this.state.user.profilepic} />
+                                    </div>
+                                )}
                             </div>
 
 

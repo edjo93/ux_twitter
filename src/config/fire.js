@@ -1,5 +1,6 @@
 import firebase from 'firebase';
-import "firebase/firestore"
+import "firebase/firestore";
+import "firebase/storage"
 
 
 var firebaseConfig = {
@@ -14,9 +15,21 @@ var firebaseConfig = {
  
 };
 
+class Firebase{
+    async logout(){
+        await firebase.auth().signOut().catch((err) =>{
+            console.log(err);
+        });
+    }
+}
+
+
+
 const fire = firebase.initializeApp(firebaseConfig);
 
 export const db = fire.firestore();
+
+export const storage = fire.storage();
 
 export default fire;
 

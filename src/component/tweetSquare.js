@@ -1,76 +1,75 @@
 import React, { useEffect, useState } from "react";
-
+import TweetContent from "./Tweet"
 import { db } from "../config/fire"
 import fire from "../config/fire";
 
-
-
 const Tweet = (props) => {
+  const { username } = props;
 
-  let email = "";
   const [tweets, setTweets] = useState([]);
-  const [currentId, setCurrentId] = useState("");
-  const [currentUser, setCurrentuser] = useState("");
+  const [canRemove, setCanRemove] = useState(false);
 
-  const getTweets = async () => {
+  useEffect(() => {
+    getTweets();
+  }, [username]);
+
+  const getTweets = () => {
     fire.auth().onAuthStateChanged((user) => {
       if (user) {
-        email = user.email;
-        db.collection("tweets").where("usuario", "==", email).onSnapshot((querySnapshot) => {
+        
+        db.collection("users").where("username", "==", props.username).onSnapshot((querySnapshot) => {
           const docs = [];
           querySnapshot.forEach((doc) => {
             docs.push({ ...doc.data(), id: doc.id });
           });
-          setTweets(docs);
+
+          setCanRemove(user.email === docs[0].email);
+
+          db.collection("tweets").where("usuario", "==", docs[0].email).onSnapshot((querySnapshot) => {
+            const docs2 = [];
+            querySnapshot.forEach((doc) => {
+              docs2.push({ ...doc.data(), id: doc.id });
+            });
+
+            setTweets(docs2);
+          });
         });
+
+        // db.collection("tweets").where("usuario", "==", props.username).onSnapshot((querySnapshot) => {
+        //   const docs = [];
+        //   querySnapshot.forEach((doc) => {
+        //     docs.push({ ...doc.data(), id: doc.id });
+        //   });
+        //   setTweets(docs);
+        //   // param.name=props.name
+        // });
       }
       else {
+        let fetchedUser;
+        db.collection("users").where("username", "==", props.username).onSnapshot((querySnapshot) => {
+          const docs = [];
+          querySnapshot.forEach((doc) => {
+            docs.push({ ...doc.data(), id: doc.id });
+          });
 
+          db.collection("tweets").where("usuario", "==", docs[0].email).onSnapshot((querySnapshot) => {
+            const docs2 = [];
+            querySnapshot.forEach((doc) => {
+              docs2.push({ ...doc.data(), id: doc.id });
+            });
+            setTweets(docs2);
+          });
+        });
       }
     });
 
   };
 
-
-  useEffect(() => {
-    getTweets();
-  }, []);
-
-
-
-
   return (
-
-
-
     <div>
-      {tweets.map((tweet) => (
-
-        <div class="row component text-left">
-          <div class="col-lg-2">
-            <img src="" class="img-fluid rounded-circle img-thumbnail" />
-          </div>
-          <div class="col-lg-10">
-            <b>{props.name}</b> {props.username}
-    <div class="tweet-content"> 
-              {tweet.contenido}
-              <div>
-                <small class="blue-text">{tweet.hashtags}</small>
-              </div>
-            </div>
-          </div>
-        </div>
-
-
-
-
-      ))};
+      {tweets.map((tweet, index) => <TweetContent removable={canRemove} key={`tweet-${index}`} name={props.name} username={props.username} content={tweet.contenido} hashtags={tweet.hashtags} id={tweet.id} profilepic={props.profilepic} />)};
     </div>
-
   );
-
-
-
 };
 
 export default Tweet;
